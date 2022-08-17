@@ -1,4 +1,6 @@
 #QR-Reader
+- State Pattern : Submitted, onProcessing, Processed
+- file's table: System should store the file name, timestamp, status and the content of the qr code.
 
 #Enable local enviroment
 - Copy .env.example to .env file
@@ -17,6 +19,9 @@ composer require laravel/breeze --dev
 php artisan breeze:install
 php artisan migrate
 ```
+# Laravel-model-sates
+https://github.com/spatie/laravel-model-states
+
 
 # Deploy 
 - composer install
