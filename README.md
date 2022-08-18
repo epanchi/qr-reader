@@ -1,6 +1,10 @@
-#QR-Reader
+# QR-Reader
 - State Pattern : Submitted, onProcessing, Processed
 - file's table: System should store the file name, timestamp, status and the content of the qr code.
+
+## Packages Used 
+- Dropzone for file upload: https://docs.dropzone.dev/
+- https://symfony.com/doc/current/components/process.html
 
 #Enable local enviroment
 - Copy .env.example to .env file

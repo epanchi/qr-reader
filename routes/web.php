@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Document;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,10 +16,54 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+    $documents = Document::get();
+    foreach ($documents as $d) {
+        $d->initWorkFlow();
+        if (!$d->workflow('can', ['processing'])) {
+            throw new \Exception('Error');
+        }
+
+        $d->workflow('apply', ['processing']);
+        $d->save();
+    }
+    dd('edd');
+    $document = new Document(['userid' => 1, 'filename' => 'new']);
+    // $document->initWorkFlow();
+
+    //  $document->setFiniteState('submitted');
+
+    if (!$document->workflow('can', ['receive'])) {
+        throw new \Exception('Error');
+    }
+
+
+    $document->workflow('apply', ['receive']);
+    $document->save();
+
+    dd($document);
+
+    return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
 
-require __DIR__.'/auth.php';
+
+Route::group(
+    ['middleware' => 'auth'],
+    function () {
+
+        Route::get('/dashboard', function () {
+            $documents = Document::get();
+            return view('dashboard', ['documents' => $documents]);
+        });
+
+        Route::get('/upload', function () {
+            return view('upload');
+        });
+
+        Route::post('/fileupload/', 'App\Http\Controllers\DocumentController@fileupload')->name('fileupload');
+    }
+);
+
+
+
+require __DIR__ . '/auth.php';
