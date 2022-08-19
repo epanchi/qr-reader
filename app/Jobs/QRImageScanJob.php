@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\Document;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,12 +11,13 @@ use Illuminate\Queue\SerializesModels;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-class ProcessDocument implements ShouldQueue
+class QRImageScanJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $id;
     protected $filename;
+
     /**
      * Create a new job instance.
      *
@@ -38,16 +38,10 @@ class ProcessDocument implements ShouldQueue
     {
         info(__METHOD__);
         try {
-            $document = Document::find($this->id);
-            $document->status = 'onprocessing';
-            $document->save();
-
             $directory = \Storage::disk('public')->path($this->id . '/');
 
-            $file_path = (\Storage::disk('public')->path($this->id . '/' . $this->filename));
-
-            // Run console command to split PDF file into images
-            $process = new Process(['pdftocairo', $file_path, '-png', $directory . $this->id]);
+            // Run Bash scann
+            $process = new Process(['sh', base_path() . '/qr.bash', $directory]);
             $process->run();
 
             // executes after the command finishes

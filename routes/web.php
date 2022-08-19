@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\QRCodeStoreJob;
 use App\Models\Document;
 use Illuminate\Support\Facades\Route;
 
@@ -21,7 +22,6 @@ Route::get('/', function () {
 Route::group(
     ['middleware' => 'auth'],
     function () {
-
         Route::get('/dashboard', function () {
             $documents = Document::get();
             return view('dashboard', ['documents' => $documents]);

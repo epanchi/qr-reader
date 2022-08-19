@@ -2,7 +2,7 @@
     <x-slot name="header">
 
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            QR File: upload
         </h2>
 
     </x-slot>
@@ -21,7 +21,12 @@
                     </form>
 
                     <p class="message"></p>
-
+                    <br>
+                    <ul>
+                        <li>Max File size 1MB</li>
+                        <li>PDF extension file allowed</li>
+                        <li></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -30,7 +35,7 @@
     <script type="text/javascript">
         Dropzone.options.dropzone = {
             maxFiles: 10,
-            maxFilesize: 12,
+            maxFilesize: 1,
 
             acceptedFiles: ".pdf",
             // addRemoveLinks: true,

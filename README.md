@@ -1,6 +1,23 @@
 # QR-Reader
 - State Pattern : Submitted, onProcessing, Processed
 - file's table: System should store the file name, timestamp, status and the content of the qr code.
+- Queue Jobs background for image generation and QR iteration
+
+# Enable application
+
+```
+$ ./vendor/bin/sail up 
+$ ./vendor/bin/sail sell
+```
+
+Shell server console
+```
+/var/www/html$  composer install 
+/var/www/html$  php artisan migrate
+/var/www/html$  php artisan queue:work 
+
+sail@988ef21636bd:/var/www/html$
+```
 
 ## Packages Used 
 - Dropzone for file upload: https://docs.dropzone.dev/
@@ -11,7 +28,8 @@
 ```
     && apt-get install -y poppler-utils \
     && apt-get install -y zbar-tools \   
-```1
+```
+
 Running code
 ```
     $ pdftocairo document.pdf -png 

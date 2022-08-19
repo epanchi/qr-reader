@@ -2,10 +2,6 @@
 ## directory image iterator script
 
 FOLDER=$1
-FILEPATH=$2
-DOCUMENTID=$3
-
-pdftocairo $FILEPATH -png $FOLDER'/'$DOCUMENTID
 
 for file in $(find ${FOLDER}   -name '*.jpg' -or -name '*.png' -or -name '*.jpeg'  );
 do

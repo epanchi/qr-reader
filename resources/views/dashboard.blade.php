@@ -27,14 +27,15 @@
                                     State
                                 </th>
                                 <th scope="col" class="py-3 px-6">
+                                    QR Code
+                                </th>
+                                <th scope="col" class="py-3 px-6">
                                     Created At
                                 </th>
                                 <th scope="col" class="py-3 px-6">
                                     Updated at
                                 </th>
-                                <th scope="col" class="py-3 px-6">
-                                    Actions
-                                </th>
+
 
                             </tr>
                         </thead>
@@ -52,13 +53,13 @@
                                         {{ $row->status }}
                                     </td>
                                     <td class="py-4 px-6">
-                                        {{ $row->created_at }}
+                                        {{ $row->qrcode }}
                                     </td>
                                     <td class="py-4 px-6">
                                         {{ $row->updated_at }}
                                     </td>
                                     <td class="py-4 px-6">
-                                        ACTIONS
+                                        {{ $row->updated_at }}
                                     </td>
                                 </tr>
                             @endforeach
