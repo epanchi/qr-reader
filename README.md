@@ -65,6 +65,7 @@ Validate image has QRcode and store result on txt file
 
 # Laravel-model-sates TODO
 https://github.com/spatie/laravel-model-states
+https://robertogallea.com/posts/development/state-pattern-implementation-of-finite-state-machine-fsm-with-laravel
 
 
 
