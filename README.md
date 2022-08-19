@@ -1,9 +1,9 @@
 # QR-Reader
-- State Pattern : Submitted, onProcessing, Processed
+- Submitted, onProcessing, Processed
 - file's table: System should store the file name, timestamp, status and the content of the qr code.
 - Queue Jobs background for image generation and QR iteration
 
-# Enable application
+# Enable application Docker Laravel Sail
 
 ```
 $ ./vendor/bin/sail up 
@@ -13,12 +13,21 @@ $ ./vendor/bin/sail sell
 Shell server console
 ```
 /var/www/html$  composer install 
+/var/www/html$  npm install
 /var/www/html$  php artisan migrate
+
+/var/www/html$  php artisan db:seed --class=UserTableSeeder
+
 /var/www/html$  php artisan queue:work 
 
 sail@988ef21636bd:/var/www/html$
 ```
-
+## Credentials to acces Backend
+```
+- http://localhost/
+- demo@mail.com
+- 0987654321
+```
 ## Packages Used 
 - Dropzone for file upload: https://docs.dropzone.dev/
 - To run console commands (phptocairo) https://symfony.com/doc/current/components/process.html
@@ -35,10 +44,6 @@ Running code
     $ pdftocairo document.pdf -png 
     $ 
 ```
-
-#Enable local enviroment
-- Copy .env.example to .env file
-- sail artisan sail:publish
 
  # Enable poppler-util on server
 To image generation we will use poppler-utils this library was prepiusly added over Dockerfile
@@ -64,7 +69,5 @@ https://github.com/spatie/laravel-model-states
 - php artisan db:seed --class=UserTableSeeder
 
 
-## Credentials to acces Backend
-- demo@mail.com
-- 0987654321
+
 
