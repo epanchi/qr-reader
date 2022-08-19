@@ -1,8 +1,5 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class='float-right'>
-            <button class="bg-green-600 text-white rounded-lg p-2 "> New file</button>
-        </div>
 
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}

@@ -16,36 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-    $documents = Document::get();
-    foreach ($documents as $d) {
-        $d->initWorkFlow();
-        if (!$d->workflow('can', ['processing'])) {
-            throw new \Exception('Error');
-        }
-
-        $d->workflow('apply', ['processing']);
-        $d->save();
-    }
-    dd('edd');
-    $document = new Document(['userid' => 1, 'filename' => 'new']);
-    // $document->initWorkFlow();
-
-    //  $document->setFiniteState('submitted');
-
-    if (!$document->workflow('can', ['receive'])) {
-        throw new \Exception('Error');
-    }
-
-
-    $document->workflow('apply', ['receive']);
-    $document->save();
-
-    dd($document);
-
-    return view('welcome');
 });
-
-
 
 Route::group(
     ['middleware' => 'auth'],

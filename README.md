@@ -4,13 +4,25 @@
 
 ## Packages Used 
 - Dropzone for file upload: https://docs.dropzone.dev/
-- https://symfony.com/doc/current/components/process.html
+- To run console commands (phptocairo) https://symfony.com/doc/current/components/process.html
+- https://github.com/khanamiryan/php-qrcode-detector-decoder
+- https://sourceforge.net/projects/zbar/
+
+```
+    && apt-get install -y poppler-utils \
+    && apt-get install -y zbar-tools \   
+```1
+Running code
+```
+    $ pdftocairo document.pdf -png 
+    $ 
+```
 
 #Enable local enviroment
 - Copy .env.example to .env file
 - sail artisan sail:publish
 
-# Enable poppler-util on server
+ # Enable poppler-util on server
 To image generation we will use poppler-utils this library was prepiusly added over Dockerfile
 - file: /docker/8.1/Dockerfile
 ```
