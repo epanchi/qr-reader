@@ -39,11 +39,15 @@ class ProcessDocument implements ShouldQueue
         info(__METHOD__);
         try {
             $document = Document::find($this->id);
-            $document->status = 'onprocessing';
-            $document->save();
 
+            // State Machine
+            $document->initWorkflow($document->user);
+            if (!$document->workflow('can', ['document-processing'])) {
+                throw new \Exception('Document change state not allowed for ('. $document->id .')');
+            }
+
+            // Parameters to generate images on STORAGE repository
             $directory = \Storage::disk('public')->path($this->id . '/');
-
             $file_path = (\Storage::disk('public')->path($this->id . '/' . $this->filename));
 
             // Run console command to split PDF file into images
@@ -54,6 +58,10 @@ class ProcessDocument implements ShouldQueue
             if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
+            // Change state ON-PROCESSING
+            $document->workflow('apply', ['document-processing']);
+            $document->save();
+
         } catch (\Exception $e) {
             info($e->getMessage());
         }
