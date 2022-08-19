@@ -1,7 +1,7 @@
 # QR-Reader
 - Submitted, onProcessing, Processed
 - file's table: System should store the file name, timestamp, status and the content of the qr code.
-- Queue Jobs background for image generation and QR iteration
+- Queue Jobs background for image generation and QR iteration (database)
 
 # Enable application Docker Laravel Sail
 
@@ -22,52 +22,43 @@ Shell server console
 
 sail@988ef21636bd:/var/www/html$
 ```
-## Credentials to acces Backend
+## Credentials to access Backend
 ```
 - http://localhost/
 - demo@mail.com
 - 0987654321
 ```
+
+## Jobs description
+- ProcessDocument:  run PDFTOCAIRO command with SYMPHONY-PROCESS library
+- QRImageScanJob :  iterate document folder and run shell script by using SYMPHONY-PROCESS library, this terminal process will generate a plan text file with QRCode if it was found.
+- QRCodeStoreJob :  read result.txt file , extract content and store data over Document record
+
 ## Packages Used 
 - Dropzone for file upload: https://docs.dropzone.dev/
-- To run console commands (phptocairo) https://symfony.com/doc/current/components/process.html
-- https://github.com/khanamiryan/php-qrcode-detector-decoder
+- To run console commands (phptocairo, bash scripts) https://symfony.com/doc/current/components/process.html
 - https://sourceforge.net/projects/zbar/
 
+Convert PDF to images peer page
+```
+    $ pdftocairo document.pdf -png 
+```
+
+Validate image has QRcode and store result on txt file
+```
+     zbarimg image.png >> result.txt
+```
+
+ # Enable additional packages on Docker file
+
+- file: /docker/8.1/Dockerfile
 ```
     && apt-get install -y poppler-utils \
     && apt-get install -y zbar-tools \   
 ```
 
-Running code
-```
-    $ pdftocairo document.pdf -png 
-    $ 
-```
-
- # Enable poppler-util on server
-To image generation we will use poppler-utils this library was prepiusly added over Dockerfile
-- file: /docker/8.1/Dockerfile
-```
-    && apt-get install -y poppler-utils \
-```
-
-# Auth
-```
-composer require laravel/breeze --dev
-php artisan breeze:install
-php artisan migrate
-```
-# Laravel-model-sates
+# Laravel-model-sates TODO
 https://github.com/spatie/laravel-model-states
-
-
-# Deploy 
-- composer install
-- npm install
-- php artisan migrate
-- php artisan db:seed --class=UserTableSeeder
-
 
 
 
