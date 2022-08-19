@@ -30,14 +30,24 @@ class QRImageScanJob implements ShouldQueue
     }
 
     /**
-     * Execute the job.
-     *
+     *  Execute the job.
+     *  Scann Images and get QRCode
      * @return void
      */
     public function handle()
     {
         info(__METHOD__);
         try {
+
+            $document = Document::find($this->id);
+
+            // State Machine
+            $document->initWorkflow($document->user);
+            if (!$document->workflow('can', ['document-processed'])) {
+                throw new \Exception('Document change state not allowed for ('. $document->id .')');
+            }
+
+
             $directory = \Storage::disk('public')->path($this->id . '/');
 
             // Run Bash scann

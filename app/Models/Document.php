@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 class Document extends Model implements \Finite\StatefulInterface
 {
     use HasFactory;
-    private $state;
+
+   public $workflowUser;
+    public $transitionReason;
     protected $machine;
 
     protected $fillable = [
@@ -19,34 +21,40 @@ class Document extends Model implements \Finite\StatefulInterface
     ];
 
 
-    public function getFiniteState()
-    {
-        return $this->state;
-    }
+    protected $statusArray = [
+        'submitted' => 'Borrador',
+        'received' => 'Recibido',
+        'invoiced' => 'Facturado',
+        'pre-invoiced' => 'Pre Facturado',
+        'paid-vehicle' => 'Pagado a Vehículo',
+        'paid-trailer' => 'Pagado a Remolque',
+        'undefined' => 'No definido'
+    ];
 
-    public function setFiniteState($state)
-    {
-        $this->state = $state;
-    }
 
     protected $workflowConfig = [
         'class' => '\App\Models\Document',
         'states' => [
             'submitted' => ['type' => \Finite\State\StateInterface::TYPE_INITIAL, 'properties' => []],
             'onprocessing' => ['type' => \Finite\State\StateInterface::TYPE_NORMAL, 'properties' => []],
-            'processed' => ['type' => \Finite\State\StateInterface::TYPE_FINAL, 'properties' => []],
+            'processed' => ['type' => \Finite\State\StateInterface::TYPE_NORMAL, 'properties' => []],
         ],
         'transitions' => [
-            'receive' => ['from' => ['submitted'], 'to' => 'onprocessing'],
-            'processing' => ['from' => ['submitted'], 'to' => 'onprocessing'],
-            'done' => ['from' => ['onprocessing'], 'to' => 'processed'],
-
+            'document-processing' => ['from' => ['submitted'], 'to' => 'onprocessing'],
+            'document-processed' => ['from' => ['onprocessing'], 'to' => 'processed'],
         ],
-
+        'callbacks' => [
+            // 'after' => [
+            //     [
+            //         'do' => ['\App\Models\Document', 'auditStates'],
+            //     ],
+            // ],
+        ],
     ];
 
-    public function initWorkflow()
+    public function initWorkflow(\App\Models\User $user)
     {
+        $this->workflowUser = $user;
         $this->machine = new \Finite\StateMachine\StateMachine();
 
         $loader = new \Finite\Loader\ArrayLoader($this->workflowConfig);
@@ -80,4 +88,21 @@ class Document extends Model implements \Finite\StatefulInterface
 
         return $returnValue;
     }
+
+
+    public function getFiniteState()
+    {
+        return $this->status;
+    }
+    public function setFiniteState($state)
+    {
+        $this->status = $state;
+    }
+
+       public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
+
 }

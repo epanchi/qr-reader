@@ -36,6 +36,15 @@ class QRCodeStoreJob implements ShouldQueue
         try {
             $file_path = (\Storage::disk('public')->path($this->id . '/result.txt'));
 
+            $document = Document::find($this->id);
+
+            // State Machine
+            $document->initWorkflow($document->user);
+            if (!$document->workflow('can', ['document-processed'])) {
+                throw new \Exception('Document change state not allowed for ('. $document->id .')');
+            }
+
+
             if (\Storage::disk('public')->exists($this->id . '/result.txt')) {
                 $fhandle = fopen($file_path, 'r');
                 $code = null;
@@ -44,9 +53,7 @@ class QRCodeStoreJob implements ShouldQueue
                     $code .= $row[0];
                 }
                 info($code);
-                $document = Document::find($this->id);
-                $document->qrcode = $code;
-                $document->status = 'processed';
+                $document->workflow('apply', ['document-processed']);
                 $document->save();
             }
         } catch (\Exception $e) {
