@@ -9,6 +9,7 @@ Needs Docker installed in dev computer
 
 After that fist time run following command, it will download and install all components to get the first instance of this application
 ```
+docker run --rm \
     -u "$(id -u):$(id -g)" \
     -v $(pwd):/var/www/html \
     -w /var/www/html \
