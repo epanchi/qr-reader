@@ -2,25 +2,29 @@
 - Submitted, onProcessing, Processed
 - file's table: System should store the file name, timestamp, status and the content of the qr code.
 - Queue Jobs background for image generation and QR iteration (database)
+- Docker intalled
 
-# Enable application Docker Laravel Sail
+# Enable application
+Needs Docker installed in dev computer
+
+After that fist time run following command, it will download and install all components to get the first instance of this application
+```
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/var/www/html \
+    -w /var/www/html \
+    laravelsail/php81-composer:latest \
+    composer install --ignore-platform-reqs
 
 ```
-$ ./vendor/bin/sail up 
-$ ./vendor/bin/sail sell
+
+After compleattly resources were provisioned, tun the following commands (1) run dev server (2) run migrations (3) run user Seeder (4) Enable Queue
+
 ```
+$ ./vendor/bin/sail up
+$ ./vendor/bin/sail php artisan migrate
+$ ./vendor/bin/sail php artisan db:seed --class=UserTableSeeder
+$ ./vendor/bin/sail php artisan queue:work 
 
-Shell server console
-```
-/var/www/html$  composer install 
-/var/www/html$  npm install
-/var/www/html$  php artisan migrate
-
-/var/www/html$  php artisan db:seed --class=UserTableSeeder
-
-/var/www/html$  php artisan queue:work 
-
-sail@988ef21636bd:/var/www/html$
 ```
 ## Credentials to access Backend
 ```
@@ -32,12 +36,13 @@ sail@988ef21636bd:/var/www/html$
 ## Jobs description
 - ProcessDocument:  run PDFTOCAIRO command with SYMPHONY-PROCESS library
 - QRImageScanJob :  iterate document folder and run shell script by using SYMPHONY-PROCESS library, this terminal process will generate a plan text file with QRCode if it was found.
+
 - QRCodeStoreJob :  read result.txt file , extract content and store data over Document record
 
 ## Packages Used 
 - Dropzone for file upload: https://docs.dropzone.dev/
-- To run console commands (phptocairo, bash scripts) https://symfony.com/doc/current/components/process.html
-- https://sourceforge.net/projects/zbar/
+- To run console commands phptocairo, bash scripts) https://symfony.com/doc/current/components/process.html
+- To read images and detect QRCodes https://sourceforge.net/projects/zbar/
 
 Convert PDF to images peer page
 ```
