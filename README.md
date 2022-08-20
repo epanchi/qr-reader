@@ -3,6 +3,7 @@
 - file's table: System should store the file name, timestamp, status and the content of the qr code.
 - Queue Jobs background for image generation and QR iteration (database)
 - Docker intalled
+- Files will be storare on storage/app/public/<ID>
 
 # Enable application (locally)
 Needs Docker installed on dev computer
@@ -77,3 +78,8 @@ Validate image has QRcode and store result on txt file
     && apt-get install -y poppler-utils \
     && apt-get install -y zbar-tools \   
 ```
+
+# Screens
+
+![Alt text](screen.png "Title")
+![Alt text](screen-queue.png "Title")
